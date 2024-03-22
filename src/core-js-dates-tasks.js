@@ -117,7 +117,7 @@ function getCountDaysOnPeriod(dateStart, dateEnd) {
   const dayDiff = diff / (24 * 60 * 60 * 1000) + 1;
   return dayDiff;
 }
-getCountDaysOnPeriod('2024-02-01T00:00:00.000Z', '2024-02-02T00:00:00.000Z');
+
 /**
  * Returns true if a given date is within a specified range, including both the start and end dates.
  *
@@ -135,10 +135,13 @@ getCountDaysOnPeriod('2024-02-01T00:00:00.000Z', '2024-02-02T00:00:00.000Z');
  * '2024-02-02', { start: '2024-02-02', end: '2024-03-02' } => true
  * '2024-02-10', { start: '2024-02-02', end: '2024-03-02' } => true
  */
-function isDateInPeriod(/* date, period */) {
-  throw new Error('Not implemented');
+function isDateInPeriod(date, period) {
+  const target = new Date(date).getTime();
+  const startDate = new Date(period.start).getTime();
+  const endDate = new Date(period.end).getTime();
+  return target >= startDate && target <= endDate;
 }
-
+isDateInPeriod('2024-02-01', { start: '2024-02-02', end: '2024-03-02' });
 /**
  * Returns the date formatted in 'M/D/YYYY, hh:mm:ss a'.
  *
