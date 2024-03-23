@@ -141,6 +141,7 @@ function isDateInPeriod(date, period) {
   const endDate = new Date(period.end).getTime();
   return target >= startDate && target <= endDate;
 }
+
 isDateInPeriod('2024-02-01', { start: '2024-02-02', end: '2024-03-02' });
 /**
  * Returns the date formatted in 'M/D/YYYY, hh:mm:ss a'.
@@ -153,8 +154,20 @@ isDateInPeriod('2024-02-01', { start: '2024-02-02', end: '2024-03-02' });
  * '1999-01-05T02:20:00.000Z' => '1/5/1999, 2:20:00 AM'
  * '2010-12-15T22:59:00.000Z' => '12/15/2010, 10:59:00 PM'
  */
-function formatDate(/* date */) {
-  throw new Error('Not implemented');
+
+function formatDate(dateStr) {
+  const date = new Date(dateStr);
+  const year = date.getUTCFullYear();
+  const month = date.getUTCMonth() + 1;
+  const day = date.getUTCDate();
+  const hours = date.getUTCHours();
+  const minutes = `${date.getUTCMinutes()}`.padStart(2, '0');
+  const seconds = `${date.getUTCSeconds()}`.padStart(2, '0');
+
+  const period = hours >= 12 ? 'PM' : 'AM';
+  const hoursAsPeriods = hours === 12 ? 12 : hours % 12;
+
+  return `${month}/${day}/${year}, ${hoursAsPeriods}:${minutes}:${seconds} ${period}`;
 }
 
 /**
