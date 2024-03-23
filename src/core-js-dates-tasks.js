@@ -269,10 +269,48 @@ function getQuarter(date) {
  * { start: '01-01-2024', end: '15-01-2024' }, 1, 3 => ['01-01-2024', '05-01-2024', '09-01-2024', '13-01-2024']
  * { start: '01-01-2024', end: '10-01-2024' }, 1, 1 => ['01-01-2024', '03-01-2024', '05-01-2024', '07-01-2024', '09-01-2024']
  */
-function getWorkSchedule(/* period, countWorkDays, countOffDays */) {
-  throw new Error('Not implemented');
+function getWorkSchedule(period, countWorkDays, countOffDays) {
+  const day = 86400000;
+  const schedule = [];
+
+  const [startDay, startMonth, startYear] = period.start
+    .split('-')
+    .map((item) => +item);
+  const [endDay, endMonth, endYear] = period.end
+    .split('-')
+    .map((item) => +item);
+
+  const start = new Date(startYear, startMonth - 1, startDay).getTime();
+  const end = new Date(endYear, endMonth - 1, endDay).getTime();
+  let workCount = countWorkDays;
+  let offCount = countOffDays;
+  let workDay = true;
+
+  for (let i = start; i <= end; i += day) {
+    if (workDay) {
+      const curDate = new Date(i);
+      const curDay = `${curDate.getDate()}`.padStart(2, 0);
+      const curMonth = `${curDate.getMonth() + 1}`.padStart(2, 0);
+      const curYear = `${curDate.getFullYear()}`;
+
+      schedule.push(`${curDay}-${curMonth}-${curYear}`);
+      workCount -= 1;
+      if (!workCount) {
+        workDay = false;
+        workCount = countWorkDays;
+      }
+    } else {
+      offCount -= 1;
+      if (!offCount) {
+        workDay = true;
+        offCount = countOffDays;
+      }
+    }
+  }
+  return schedule;
 }
 
+getWorkSchedule({ start: '01-01-2024', end: '15-01-2024' }, 1, 3);
 /**
  * Determines whether the year in the provided date is a leap year.
  * A leap year is a year divisible by 4, but not by 100, unless it is also divisible by 400.
