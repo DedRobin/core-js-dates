@@ -310,7 +310,6 @@ function getWorkSchedule(period, countWorkDays, countOffDays) {
   return schedule;
 }
 
-getWorkSchedule({ start: '01-01-2024', end: '15-01-2024' }, 1, 3);
 /**
  * Determines whether the year in the provided date is a leap year.
  * A leap year is a year divisible by 4, but not by 100, unless it is also divisible by 400.
@@ -323,8 +322,10 @@ getWorkSchedule({ start: '01-01-2024', end: '15-01-2024' }, 1, 3);
  * Date(2022, 2, 1) => false
  * Date(2020, 2, 1) => true
  */
-function isLeapYear(/* date */) {
-  throw new Error('Not implemented');
+function isLeapYear(date) {
+  const day = 86400000;
+  const lastDateOfFebruary = new Date(date - day);
+  return lastDateOfFebruary.getDate() === 29;
 }
 
 module.exports = {
